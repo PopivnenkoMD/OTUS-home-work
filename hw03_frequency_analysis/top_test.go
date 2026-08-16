@@ -79,4 +79,16 @@ func TestTop10(t *testing.T) {
 			require.Equal(t, expected, Top10(text))
 		}
 	})
+
+	t.Run("example form tak description", func(t *testing.T) {
+		text := "cat and dog, one dog,two cats and one man"
+		expected := []string{"and", "one", "cat", "cats", "dog,", "dog,two", "man"}
+		require.Equal(t, expected, Top10(text))
+	})
+
+	t.Run("more than 10 words with equal frequency have to take 10 lexicographically first", func(t *testing.T) {
+		text := "o n m l k j i h g f e d c b a"
+		expected := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"}
+		require.Equal(t, expected, Top10(text))
+	})
 }
