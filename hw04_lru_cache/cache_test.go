@@ -50,7 +50,55 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		c := NewCache(3)
+
+		c.Set("aaa", 1)
+		c.Set("bbb", 2)
+		c.Set("ccc", 3)
+		c.Set("ddd", 4)
+
+		_, ok := c.Get("aaa")
+		require.False(t, ok)
+
+		val, ok := c.Get("bbb")
+		require.True(t, ok)
+		require.Equal(t, 2, val)
+
+		val, ok = c.Get("ccc")
+		require.True(t, ok)
+		require.Equal(t, 3, val)
+
+		val, ok = c.Get("ddd")
+		require.True(t, ok)
+		require.Equal(t, 4, val)
+	})
+
+	t.Run("purge logic - least recently used", func(t *testing.T) {
+		c := NewCache(3)
+
+		c.Set("aaa", 1)
+		c.Set("bbb", 2)
+		c.Set("ccc", 3)
+
+		c.Get("aaa")
+		c.Set("bbb", 20)
+
+		c.Set("ddd", 4)
+
+		_, ok := c.Get("ccc")
+		require.False(t, ok)
+
+		val, ok := c.Get("aaa")
+		require.True(t, ok)
+		require.Equal(t, 1, val)
+
+		val, ok = c.Get("bbb")
+		require.True(t, ok)
+		require.Equal(t, 20, val)
+
+		val, ok = c.Get("ddd")
+		require.True(t, ok)
+		require.Equal(t, 4, val)
 	})
 }
 
