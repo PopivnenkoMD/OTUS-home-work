@@ -48,4 +48,27 @@ func TestList(t *testing.T) {
 		}
 		require.Equal(t, []int{70, 80, 60, 40, 10, 30, 50}, elems)
 	})
+
+	t.Run("remove edge cases", func(t *testing.T) {
+		l := NewList()
+
+		l.PushBack(1)
+		l.PushBack(2)
+		l.PushBack(3) // [1, 2, 3]
+
+		l.Remove(l.Front()) // проверка на удаление первого элемента: [2, 3]
+		require.Equal(t, 2, l.Len())
+		require.Equal(t, 2, l.Front().Value)
+		require.Equal(t, 3, l.Back().Value)
+
+		l.Remove(l.Back()) // проверка на удаление последнего элемента: [2]
+		require.Equal(t, 1, l.Len())
+		require.Equal(t, 2, l.Front().Value)
+		require.Equal(t, 2, l.Back().Value)
+
+		l.Remove(l.Front()) // убрали единственный оставшийся элемент: []
+		require.Equal(t, 0, l.Len())
+		require.Nil(t, l.Front())
+		require.Nil(t, l.Back())
+	})
 }
